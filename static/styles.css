@@ -1,68 +1,362 @@
+/* styles.css — modern + light sci-fi vibe */
+
+/* ===== CSS Variables ===== */
+:root {
+    --bg: #0a0c10;
+    --bg-accent: #0c0f15;
+    --panel: rgba(18, 22, 30, 0.6);
+    --panel-strong: rgba(18, 22, 30, 0.9);
+    --text: #e6f1ff;
+    --muted: #8aa0b8;
+    --line: rgba(140, 160, 185, 0.18);
+    --accent: #29e6ff;
+    /* cyan */
+    --accent-2: #b14bff;
+    /* magenta */
+    --error: #ff4d6d;
+
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+}
+
+/* Optional: sci-fi display fonts if available */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 24px;
-    background: #f7f9fc;
-    color: #111;
+    height: 100%;
+    background: #000;
+    color: var(--text);
+    font: 16px/1.55 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 0.1px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
+/* Subtle moving nebula */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -30%;
+    pointer-events: none;
+    background:
+        radial-gradient(40% 35% at 20% 20%, rgba(41, 230, 255, 0.10), transparent 70%),
+        radial-gradient(35% 30% at 80% 10%, rgba(177, 75, 255, 0.08), transparent 70%),
+        radial-gradient(50% 40% at 60% 80%, rgba(41, 230, 255, 0.06), transparent 70%);
+    filter: blur(40px) saturate(120%);
+    animation: drift 50s linear infinite alternate;
+    z-index: 0;
+}
+
+@keyframes drift {
+    from {
+        transform: translate3d(-2%, -1%, 0) scale(1);
+    }
+
+    to {
+        transform: translate3d(2%, 1%, 0) scale(1.05);
+    }
+}
+
+/* Gentle scanlines for retro-futurism */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.03),
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px,
+            transparent 3px);
+    mix-blend-mode: overlay;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+/* ===== Layout ===== */
+.container {
+    position: relative;
+    z-index: 1;
+    width: min(1100px, 92vw);
+    margin: clamp(24px, 6vw, 64px) auto;
+    padding: clamp(20px, 3vw, 32px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)) no-repeat,
+        var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px) saturate(120%);
+}
+
+/* Title */
 h1 {
-    margin-bottom: 8px;
+    margin: 0 0 8px;
+    font: 800 clamp(28px, 4vw, 40px)/1.1 "Orbitron", "Inter", system-ui, sans-serif;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 18px rgba(41, 230, 255, 0.25);
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+/* Meta line */
+.meta {
+    margin: 2px 0 18px;
+    font-size: 0.95rem;
+    color: var(--muted);
 }
 
-th,
-td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-    vertical-align: top;
+.meta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(41, 230, 255, 0.4);
 }
 
-thead th {
-    background: #f0f4f8;
-    font-weight: 600;
+.meta a:hover {
+    border-bottom-style: solid;
 }
 
-tr:hover td {
-    background: #fcfdff;
-}
-
+/* Utility */
 .small {
-    color: #555;
-    font-size: 0.95em;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 4px;
 }
 
 .muted {
-    color: #666;
-    font-size: 0.9em;
+    color: var(--muted);
 }
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.meta {
-    font-size: 0.9em;
-    margin-bottom: 16px;
-    color: #333;
-}
-
+/* Error box */
 .error {
-    color: #b00020;
-    background: #fff0f0;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #f3c2c2;
+    margin: 12px 0 10px;
+    padding: 14px 16px;
+    border-left: 4px solid var(--error);
+    border-radius: var(--radius-sm);
+    background:
+        linear-gradient(180deg, rgba(255, 77, 109, 0.12), rgba(255, 77, 109, 0.07));
+    box-shadow: 0 8px 24px rgba(255, 77, 109, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
+.error strong {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: #ffd1db;
+}
+
+/* ===== Table ===== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 50%);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* Header */
+thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 0.86rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #cdeaff;
+    background:
+        linear-gradient(180deg, rgba(41, 230, 255, 0.14), rgba(41, 230, 255, 0.06) 60%, rgba(0, 0, 0, 0.0)),
+        linear-gradient(90deg, rgba(41, 230, 255, 0.18), rgba(177, 75, 255, 0.18));
+    border-bottom: 1px solid rgba(41, 230, 255, 0.25);
+    backdrop-filter: blur(6px);
+}
+
+/* Cells */
+td {
+    padding: 14px 16px;
+    border-bottom: 1px dashed var(--line);
+    vertical-align: top;
+}
+
+/* Row looks like a holographic card on hover */
+tbody tr {
+    transition: background 240ms ease, transform 140ms ease, box-shadow 240ms ease;
+}
+
+tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+tbody tr:hover td {
+    background: linear-gradient(90deg, rgba(41, 230, 255, 0.08), rgba(177, 75, 255, 0.08));
+    box-shadow:
+        inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+        0 0 0 1px rgba(41, 230, 255, 0.18);
+}
+
+/* Subtle column separators on wide screens */
+@media (min-width: 860px) {
+
+    td+td,
+    th+th {
+        box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.035);
+    }
+}
+
+/* Links */
 a {
-    color: #1a73e8;
+    color: var(--accent);
     text-decoration: none;
+    border-bottom: 1px dashed rgba(41, 230, 255, 0.4);
+    transition: border 120ms ease, text-shadow 120ms ease, color 120ms ease;
+}
+
+a:hover {
+    color: #a1ecff;
+    border-bottom-style: solid;
+    text-shadow: 0 0 8px rgba(41, 230, 255, 0.5);
+}
+
+/* ===== Responsive: Stack rows as cards on small screens ===== */
+@media (max-width: 860px) {
+    thead {
+        display: none;
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    tbody tr {
+        margin: 12px 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+    }
+
+    td {
+        border: 0;
+        border-bottom: 1px dashed var(--line);
+        padding: 12px 14px 12px 124px;
+        /* room for labels */
+        position: relative;
+        min-height: 44px;
+    }
+
+    td:last-child {
+        border-bottom: 0;
+    }
+
+    /* Labels for each field */
+    td:nth-child(1)::before {
+        content: "Name";
+    }
+
+    td:nth-child(2)::before {
+        content: "Username";
+    }
+
+    td:nth-child(3)::before {
+        content: "Email";
+    }
+
+    td:nth-child(4)::before {
+        content: "Address";
+    }
+
+    td:nth-child(5)::before {
+        content: "Phone";
+    }
+
+    td:nth-child(6)::before {
+        content: "Website";
+    }
+
+    td:nth-child(7)::before {
+        content: "Company";
+    }
+
+    td::before {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        width: 100px;
+        font: 600 0.75rem/1 "Inter", system-ui, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #cdeaff;
+        opacity: 0.9;
+    }
+
+    /* Tighten inner utility text on mobile */
+    .small {
+        margin-top: 2px;
+    }
+}
+
+/* ===== Nice touches ===== */
+/* Selection */
+::selection {
+    background: rgba(177, 75, 255, 0.45);
+    color: #fff;
+}
+
+/* Scrollbar (WebKit) */
+*::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+
+/* Focus rings */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(41, 230, 255, 0.25);
+    border-bottom-style: solid;
+}
+
+/* Micro-animation for the header glow on load */
+@keyframes headlinePop {
+    0% {
+        filter: blur(6px) brightness(0.7);
+        opacity: 0;
+    }
+
+    100% {
+        filter: blur(0) brightness(1);
+        opacity: 1;
+    }
+}
+
+h1 {
+    animation: headlinePop 600ms ease-out both;
 }
