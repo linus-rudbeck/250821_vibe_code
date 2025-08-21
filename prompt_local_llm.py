@@ -1,5 +1,4 @@
 import requests
-from openai import OpenAI
 
 PROMPT = """
 Write me a poem about birds and bees
